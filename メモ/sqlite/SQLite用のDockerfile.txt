@@ -1,0 +1,50 @@
+FROM ruby:3.3.7
+
+RUN apt-get update -qq && apt-get install -y \
+    build-essential \
+    libsqlite3-dev \
+    # libpq-dev \
+    # npm \
+    vim 
+    # sudo 
+    # curl
+
+# # nvmをインストール
+# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+# # Node.jsをインストール（nvmを使ってNode.jsのインストール）
+# RUN export NVM_DIR="$HOME/.nvm" && \
+#     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+#     nvm install 20 && \
+#     nvm use 20 && \
+#     nvm alias default 20
+    
+# # yarnをインストール
+# RUN npm install -g yarn
+
+WORKDIR /app
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
+# RUN bundle update --bundler
+# RUN gem update --system
+RUN bundle install
+
+COPY . /app
+
+# # ==================================
+# # entrypointの設定
+# # ==================================
+# # entrypoint.shをコンテナ内の/usr/bin/にコピー
+# COPY entrypoint.sh /usr/bin/
+# # entrypoint.shに実行権限を付与
+# RUN chmod +x /usr/bin/entrypoint.sh
+# # コンテナ起動時にentrypoint.shを実行
+# ENTRYPOINT ["entrypoint.sh"]
+# # ===================================
+
+# コンテナの3000番ポートを外部に公開
+EXPOSE 3000
+
+# Railsサーバーを0.0.0.0で起動し、外部からアクセス可能にする
+CMD [ "rails", "server", "-b", "0.0.0.0", "-p", "3000" ]
+

@@ -1,0 +1,16 @@
+Options:
+--css=sass
+デフォルトでdart Sassが使われるようになる
+
+--css=tailwind
+デフォルトでtailwindが使われる
+
+--skip-docker
+Dockerfileを生成しない、上書きしなくなる
+※でもこれすると.dockerignoreも生成されない
+
+--database=postgresql
+DBにPGを使う
+
+--force
+既存ファイルがあっても強制的に上書きする

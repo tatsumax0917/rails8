@@ -1,0 +1,61 @@
+====本番デプロイ時
+
+[datagbase.yml]を環境通りになってるかチェック
+production:
+  <<: *default
+  database: storage/production.sqlite3
+
+1.config.hosts = を確認
+
+config.hosts << "geocoder-cwja.onrender.com"
+
+はconfig/environments/production.rbに記述するべき。
+
+
+2.
+ホスティングサービスに環境変数をセット
+キー  RAILS_ENV
+値    production
+
+3.
+本番用に調整する
+
+[config/application.rb]
+config.assets.compile = true
+
+もしくは
+
+※ 一般的には、本番環境では config.assets.compile = false と設定
+※ config.public_file_server.enabled = trueこれも同時に設定する
+
+
+上記の設定は
+[Dockerfile.prod]　を作成
+オリジナルコードを転記
+entrypointの部分のコメントアウトを解放
+
+[entrypoint.sh]
+コメントアウトを解放
+
+[compose.prod.yml]　を作成
+services:
+  web:
+    build:
+      context: . # .はこのファイルがある階層
+      dockerfile: Dockerfile.prod # 使用するDockerfile
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b '0.0.0.0' -p 3000"
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: production # 環境指定
+
+※これをビルドするのはenvironmentをproductionとするため
+※これが必要なのは開発と本番をきっちり分けるため
+
+$ docker compose -f compose.prod.yml build
+
+これで本番用イメージを作成してデプロイ
+
+

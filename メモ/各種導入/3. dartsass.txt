@@ -1,0 +1,13 @@
+1.
+./bin/bundle add dartsass-rails
+
+
+2.
+./bin/rails dartsass:install
+
+※ app/stylesheets/application.cssは削除しても良い
+※ package.jsonは特にいじらなくてOK
+
+
+3. Procfile
+dartsass: bin/rails dartsass:watch

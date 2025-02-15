@@ -1,0 +1,59 @@
+参考：https://techracho.bpsinc.jp/hachi8833/2022_02_04/115417
+
+[Gemfileに以下を追加]
+group :development do
+	gem "guard-livereload", require: false
+	gem "rack-livereload"
+end
+
+※require: falseは自動で読み込まない設定
+なぜか書いてるか？→bin/devで起動→procfileに起動コマンド書いてるから重複したらアカンから
+
+
+
+bundle install
+
+
+設定ファイルのGuardfilieが生成されるを生成
+guard init livereload
+
+
+
+Rack::LiveReloadを有効にする
+[config/environments/development.rb]
+
+Rails.application.configure do
+  config.middleware.insert_after ActionDispatch::Static, Rack::LiveReload
+end
+
+
+[Procfile.dev]
+.
+.
+livereload: bundle exec guard start -i -g livereload
+
+
+
+[Docker外部に転送するポートを開く]
+compose.yml
+port:
+- "35729:35729"　を追加
+
+
+
+ChromeブラウザにLiveReload拡張をインストール
+https://chromewebstore.google.com/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
+
+
+
+
+
+
+
+＝＝＝＝＝これは不要！！何かの間違い！！！＝＝＝＝＝＝＝＝
+
+[app/javascript/application.jsに追記]
+.
+.
+import { start } from "hotwire-livereload";
+start();

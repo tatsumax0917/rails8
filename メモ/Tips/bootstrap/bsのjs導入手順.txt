@@ -1,0 +1,46 @@
+1.
+[Gemfile]
+# bootstrap
+gem 'bootstrap'
+gem 'mini_racer'
+gem 'sassc-rails'
+
+2.
+[command]
+$ bin/importmap pin bootstrap
+
+3.
+[app/javasctipt/application.js]
+import "bootstrap"
+を追記
+
+4.
+[application.scss]
+// Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
+import "@hotwired/turbo-rails"
+import "controllers"
+import "bootstrap"　←追記
+
+5.importmap.rb
+pin "bootstrap" # @5.3.3
+pin "@popperjs/core", to: "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/esm/popper.min.js"
+
+ok
+
+
+======
+
+[コマンド]
+bin/importmap pin jquery
+bin/importmap pin bootstrap
+
+
+[importmap.rb]
+pin "jquery" # @3.7.1
+pin "bootstrap" # @5.3.3
+pin "@popperjs/core", to: "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/esm/popper.min.js"
+
+[application.js]
+import "bootstrap"
+import jquery from "jquery"
+window.$ = jquery

@@ -1,0 +1,23 @@
+[DartSass + esbuild導入]
+
+1. container create
+
+docker compose run --rm web rails new . --javascript=esbuild
+
+
+2. compose.yml
+command: に bin/dev を記述
+
+3. package.json
+
+"scripts": {
+    "build": "yarn build:js",
+    "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
+    "build:js:watch": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch"
+},
+
+
+4. Procfile
+
+web: rails s -b '0.0.0.0' -p 3000
+esbuild: yarn build:js:watch

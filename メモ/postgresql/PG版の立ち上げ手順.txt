@@ -1,0 +1,50 @@
+参考：https://qiita.com/Kento210/items/5f153bc20e9ba28375fd
+
+※PGの時に追加でいじるところは
+・config/database.yml
+・Gemfile
+・compose.yml
+
+
+========================
+
+ルートのファイルと、PG用のファイルを必要な分だけ入れ替える
+
+
+docker compose run --rm web rails new .  --database=postgresql (各種オプション)
+
+[Override: Gemfile -y]
+[Override: Dockerfile -n]
+
+
+GemfileのDBがsqliteじゃなくてpgに変更
+gem "pg", "~> 1.1"
+※バージョンはその時々で変えてもOK
+
+
+
+config/database.yml書き換える
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: db
+  username: <%= ENV["POSTGRES_USER"] %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+
+development:
+  <<: *default
+  database: app_development
+
+test:
+  <<: *default
+  database: app_test
+
+production:
+  <<: *default
+  database: app_production
+
+
+
+
+docker compose up --build -d

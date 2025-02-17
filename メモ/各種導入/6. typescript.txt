@@ -1,0 +1,36 @@
+1.
+タイプスクリプトが入ってるか確認
+npx tsc -v
+
+Versionなんとかとか出たらインストールされている
+(y)? みたいなのでたら未インストール
+
+
+2.
+タイプスクリプトのインストール
+yarn add typescript react react-dom react-router-dom @types/react @types/react-dom @types/react-router-dom
+
+↑
+上記のコマンドを打ってこれで確認
+↓
+
+
+import React from 'react';
+
+// タイプチェック用の変数
+const message: string = 'Hello, TypeScript!';
+
+const Greeting: React.FC = () => {
+  return (
+    <div>
+      <h1>Greeting components</h1>
+      <p>{message}</p>
+    </div>
+  );
+}
+
+export default Greeting;
+
+
+3.
+ファイルにまだ赤い波線エラー出てたらファイル閉じたら直ることある（謎仕様）

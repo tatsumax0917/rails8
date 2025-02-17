@@ -12,12 +12,13 @@ command: に bin/dev を記述
 
 "scripts": {
     "build": "yarn build:js",
-    "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
-    "build:js:watch": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch"
+    "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets"
 },
+
+※どっちでもいいけど、本番用と開発中--watchありとなしを作っておくといいかも（もし動かない場合は作ろう）
 
 
 4. Procfile
 
 web: rails s -b '0.0.0.0' -p 3000
-esbuild: yarn build:js:watch
+esbuild: yarn build:js --watch

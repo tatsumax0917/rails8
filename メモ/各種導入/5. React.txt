@@ -1,26 +1,28 @@
 ※前提:node, yarnを使えるようにしておく
 
 
-・railsでreactを扱えるようにする
+1. railsでreactを扱えるようにする
+
 yarn add react react-dom
 
 
-・railsのcontrollerを作成（Rails 側の MVC は1つだけあれば十分）
+2. railsのcontrollerを作成（Rails 側の MVC は1つだけあれば十分）
 rails g controller home index
 
 
-・config/routes.rb を編集
+3. （任意）config/routes.rb を編集
 root 'home#index'
 
 
-・view/layout/application.html.erb
+4. view/layout/application.html.erbにReactの入口を追加
 <body>
-  <div id="root"></div> ←追加
+  // ↓これ追加
+  <div id="root"></div>
   <%= yield %>
 </body>
+ 
 
-
-・app/javascript/application.jsをapplication.jsxに変更
+5. app/javascript/application.jsをapplication.jsxに変更
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -42,26 +44,32 @@ createRoot(root).render(
 );
 
 
-・app/views/home/index.html.erbの中身は空に
+6. app/views/home/index.html.erbの中身は空に
 
 
-===================================
-[package.json]
+7. package.jsonに--loader:.jsx=jsxを追加して認識させる
+
 "scripts": {
-  "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --loader:.jsx=jsx --watch",
-  "build": "yarn build:js" ←herokuなどではbuildで認識するらしいから結局build:js実行してるけどまぁ一応
+  "build": "yarn Tbuild:js",
+  "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --loader:.jsx=jsx ",
 },
 
-[Procfile.dev]
+
+※このように --loader:.jsx=jsxを追加する
+※どっちでもいいけど、本番用と開発中--watchありとなしを作っておくといいかも（もし動かない場合は作ろう）
+
+
+
+8.Procfile.dev(参考)
+
 web: bin/rails server -b 0.0.0.0 -p 3000
 js: yarn build:js
+
 (※--watchはpackage.jsonのscriptでするのが本来らしい)
 
 
 
-=======Tips========
-プロジェクトルートに
-[jsconfig.json]作って
+9. （任意）プロジェクトルートに jsconfig.json 作っておくと便利
 
 {
   "compilerOptions": {
@@ -74,3 +82,6 @@ js: yarn build:js
 
 とすると'@/components/Hello'みたいに読み込める
 @はbaseUrl
+
+
+

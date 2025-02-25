@@ -13,7 +13,13 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     # libpq-dev \
     # sudo \
     # curl \
+    # postgresql-client \
     vim
+    # openssh \
+
+ENV EDITOR vim
+
+WORKDIR /app
 
 WORKDIR /app
 COPY Gemfile /app/Gemfile

@@ -8,22 +8,18 @@
 
 ========================
 
-ルートのファイルと、PG用のファイルを必要な分だけ入れ替える
-
-
+★　プロジェクトを新規作成（コンテナ外で作成）
 docker compose run --rm web rails new .  --database=postgresql (各種オプション)
 
-[Override: Gemfile -y]
-[Override: Dockerfile -n]
-
-
+※上記オプション指定したらGemfileに自動で 'pg'が追加される
+参考：
 GemfileのDBがsqliteじゃなくてpgに変更
 gem "pg", "~> 1.1"
 ※バージョンはその時々で変えてもOK
 
 
+★　config/database.yml書き換える
 
-config/database.yml書き換える
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -45,6 +41,15 @@ production:
   database: app_production
 
 
+以上
+
+＝＝そのあと＝＝
+Procfileとか使うときはcompose.ymlのcommandにbin/devを設定して
+prockfileもいじる必要ある
 
 
-docker compose up --build -d
+＝＝＝補足＝＝＝
+pg使うときはDockerfileには、
+・libpq-dev
+・postgresql-client
+の2つが必要

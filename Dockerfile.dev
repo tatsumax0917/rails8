@@ -7,28 +7,15 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get update -qq && \
     apt-get install -y \
     build-essential \
-    libsqlite3-dev \
+    # libsqlite3-dev \
     nodejs \
     yarn \
-    # libpq-dev \
+    libpq-dev \
     # sudo \
     # curl \
-    # postgresql-client \
+    postgresql-client \
     vim
-    # openssh \
-
-RUN git config --global alias.aa "add -A" && \
-    git config --global alias.cm "commit -m" && \
-    git config --global alias.s "status" && \
-    git config --global alias.b "branch" && \
-    git config --global user.name "tatsumax" && \
-    git config --global user.email "tatsumax.development@gmail.com"
-
-
-ENV EDITOR vim
-
-WORKDIR /app
-
+    
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock

@@ -7,20 +7,15 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get update -qq && \
     apt-get install -y \
     build-essential \
-    libsqlite3-dev \
+    # libsqlite3-dev \
     nodejs \
     yarn \
-    # libpq-dev \
+    libpq-dev \
     # sudo \
     # curl \
-    # postgresql-client \
+    postgresql-client \
     vim
-    # openssh \
-
-ENV EDITOR vim
-
-WORKDIR /app
-
+    
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock

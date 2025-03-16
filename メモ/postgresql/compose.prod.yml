@@ -3,10 +3,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    command: bash -c "rm -f tmp/pids/server.pid && rails server -b '0.0.0.0' -p 3000"
+    # command: bash -c "rm -f tmp/pids/server.pid && bin/dev"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     environment:
-      POSTGRES_USER: tatsumax
-      POSTGRES_PASSWORD: maomaomaoti123
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       RAILS_ENV: production
     volumes:
       - .:/app
@@ -21,9 +22,9 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: tatsumax
-      POSTGRES_PASSWORD: maomaomaoti123
-      POSTGRES_DB: app_production
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: app_development
     volumes:
       - postgres_volume:/var/lib/postgresql/data
 

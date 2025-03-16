@@ -15,7 +15,7 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     # curl \
     postgresql-client \
     vim
-
+    
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock

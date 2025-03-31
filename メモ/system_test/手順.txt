@@ -1,0 +1,93 @@
+〇　compose.ymlを調整する
+・seleniumコンテナをイメージを使って作成するようにする
+・依存関係も調整する
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      RAILS_ENV: development
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+      - selenium
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: app_development
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - "7900:7900"
+
+volumes:
+  postgres_volume:
+
+
+〇　Gemfile
+gem "webdrivers"があれば削除
+webdriversをrequireしていると、インストールされているchromeを探すのでエラーになってしまうから、今回はremoteのseleniumと連携する方針なのでwebdriversは不要
+
+
+〇　test/application_system_test_case.rbを調整する
+
+# selenium を使うための設定を追加します。
+# url の host は docker-compose.yml の service 名です。# （http://service名:4444)
+# Capybara.server_host はデフォルトだと 127.0.0.1 ですが、それだと接続が上手くいきません。
+# 環境変数 HOSTNAME の値を指定してあげると上手く接続できるようになります。
+# docker で hostname とコマンドを打つと出力される
+
+require "test_helper"
+
+class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
+  driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400], options: {
+    browser: :remote,
+    url: 'http://selenium:4444',
+  }
+
+  Capybara.server_host = ENV.fetch('HOSTNAME')
+end
+
+
+〇　システムテストを作成
+rails g system_test テストファイル名
+
+
+〇　システムテストの内容（例）
+require "application_system_test_case"
+
+class NavigationTest < ApplicationSystemTestCase
+  test "clicking the HOME link navigates to the home page" do
+    # Users#index ページにアクセス
+    visit users_path
+
+    # 「HOME」リンクをクリック
+    click_on 'HOME'
+
+    # 遷移先がホームページ（root_path）であることを確認
+    assert_current_path root_path
+
+    # ホームページに期待されるテキストが表示されているかを確認
+    assert_text "Welcome to the Home Page"  # 例: ホームページに表示されるテキスト
+  end
+end
+
+
+〇　システムテストを実行する
+rails test:system

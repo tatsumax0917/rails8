@@ -5,25 +5,26 @@
 ・Gemfile
 ・compose.yml
 
-
 ========================
 
-★　プロジェクトを新規作成（コンテナ外で作成）
-docker compose run --rm web rails new .  --database=postgresql (各種オプション)
+〇　プロジェクトを新規作成（コンテナ外で作成）
+docker compose run --rm web rails new . --css=sass --database=postgresql
 
 ※上記オプション指定したらGemfileに自動で 'pg'が追加される
 参考：
 GemfileのDBがsqliteじゃなくてpgに変更
 gem "pg", "~> 1.1"
-※バージョンはその時々で変えてもOK
 
 
-★　Gemfileに追加
+〇　Gemfileに追加
 group :development, :test do
   gem 'dotenv-rails' 
 end
+↓
+bundle install
 
-★　config/database.yml書き換える
+
+〇　config/database.ymlを下記に書き換える
 
 default: &default
   adapter: postgresql
@@ -49,9 +50,10 @@ production:
 以上
 
 ＝＝そのあと＝＝
-Procfileとか使うときはcompose.ymlのcommandにbin/devを設定して
-prockfileもいじる必要ある
+Procfileとか使うときはcompose.ymlのcommandに
+bin/devを設定してprockfileもいじる必要ある
 
+rails s -p 3000 -b '0.0.0.0'
 
 ＝＝＝補足＝＝＝
 pg使うときはDockerfileには、

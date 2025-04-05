@@ -1,0 +1,38 @@
+※拡張機能インストールはインタフェースとしての役割だから本体と拡張機能どっちも必要
+
+
+〇　prettier と prettier-plugin-erb をインストール
+(プロジェクトフォルダのルートで実行（エディタに対してのだからコンテナの仲じゃない)
+npm install --save-dev prettier prettier-plugin-erb
+
+(prettier-plugin-erb は、.html.erb ファイルを認識して自動的にフォーマットしてくれます。)
+
+〇　VSCODEの拡張機能のprettierを入れる
+
+〇　.prettierrc 設定ファイルを作成
+{
+  "plugins": ["prettier-plugin-erb"],
+  "erb": {
+    "tabWidth": 2,
+    "semi": true
+  }
+}
+
+〇　VSCode で Prettier 
+[settings.json]
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  // "prettier.requireConfig": true, 
+
+  "files.associations": {
+    "*.html.erb": "erb"
+  }
+}
+
+〇　使い方
+
+セーブするか、
+ctrl + alt + f

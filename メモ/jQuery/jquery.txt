@@ -1,0 +1,16 @@
+[command]
+bin/importmap pin jquery
+
+[importmap.rb - confirm]
+pin "jquery"
+
+[application.js]
+import "bootstrap"
+import jquery from "jquery"
+window.$ = jquery
+
+console.log("js worked");
+
+$(function(){
+  alert("jQuery worked");
+});

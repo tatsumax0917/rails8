@@ -1,6 +1,6 @@
 参考：https://techracho.bpsinc.jp/hachi8833/2022_02_04/115417
 
-[Gemfileに以下を追加]
+[Gemfile]
 group :development do
 	gem "guard-livereload", require: false
 	gem "rack-livereload"
@@ -10,17 +10,16 @@ end
 なぜか書いてるか？→bin/devで起動→procfileに起動コマンド書いてるから重複したらアカンから
 
 
-
+[command]
 bundle install
 
 
-設定ファイルのGuardfilieが生成されるを生成
+[command - setting file generate]
 guard init livereload
 
 
-
-Rack::LiveReloadを有効にする
 [config/environments/development.rb]
+Rack::LiveReloadを有効にする
 
 Rails.application.configure do
   config.middleware.insert_after ActionDispatch::Static, Rack::LiveReload
@@ -28,19 +27,15 @@ end
 
 
 [Procfile.dev]
-.
-.
 livereload: bundle exec guard start -i -g livereload
 
 
-
-[Docker外部に転送するポートを開く]
-compose.yml
+[compose.yml - Docker外部に転送するポートを開く]
 port:
-- "35729:35729"　を追加
+- "35729:35729"
 
 
-
+[browser - chrome]
 ChromeブラウザにLiveReload拡張をインストール
 https://chromewebstore.google.com/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
 

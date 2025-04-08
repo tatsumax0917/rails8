@@ -1,36 +1,38 @@
 FROM ruby:3.3.7
 
-# 最新のNode.jsとYarnを公式リポジトリからインストール
+# === 最新のNode.jsとYarnを公式リポジトリからインストール ===
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | tee /etc/apt/trusted.gpg.d/yarn.asc && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update -qq && \
     apt-get install -y \
     build-essential \
+    # === SQLite3 ===
     libsqlite3-dev \
+    # === PostgreSQL ===
+    # postgresql-client \
+    # libpq-dev \
     nodejs \
     yarn \
-    # libpq-dev \
-    # sudo \
     # curl \
-    # postgresql-client \
     vim
-
-ENV EDITOR vim
-
-WORKDIR /app
 
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 
+# === 以下2つは初回以外コメントアウトでOK === 
 # RUN bundle update --bundler
 # RUN gem update --system
+
 RUN bundle install
+
+# === esbuildの場合 ===
+# RUN yarn add bootstrap @popperjs/core
 
 COPY . /app
 
-# # entrypointの設定
+# # === entrypoint ===
 # COPY entrypoint.sh /usr/bin/
 # RUN chmod +x /usr/bin/entrypoint.sh
 # ENTRYPOINT ["entrypoint.sh"]

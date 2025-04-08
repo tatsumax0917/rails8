@@ -1,4 +1,4 @@
-〇　compose.ymlを調整する
+[compose.yml]
 ・seleniumコンテナをイメージを使って作成するようにする
 ・依存関係も調整する
 
@@ -40,12 +40,12 @@ volumes:
   postgres_volume:
 
 
-〇　Gemfile
+[Gemfile]
 gem "webdrivers"があれば削除
 webdriversをrequireしていると、インストールされているchromeを探すのでエラーになってしまうから、今回はremoteのseleniumと連携する方針なのでwebdriversは不要
 
 
-〇　test/application_system_test_case.rbを調整する
+[test/application_system_test_case.rbを調整する]
 
 # selenium を使うための設定を追加します。
 # url の host は docker-compose.yml の service 名です。# （http://service名:4444)
@@ -65,11 +65,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 end
 
 
-〇　システムテストを作成
+[システムテストを作成]
 rails g system_test テストファイル名
 
 
-〇　システムテストの内容（例）
+[システムテストの内容（例）]
 require "application_system_test_case"
 
 class NavigationTest < ApplicationSystemTestCase
@@ -89,5 +89,5 @@ class NavigationTest < ApplicationSystemTestCase
 end
 
 
-〇　システムテストを実行する
+[システムテストを実行する]
 rails test:system

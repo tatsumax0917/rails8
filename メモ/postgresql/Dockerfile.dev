@@ -24,7 +24,11 @@ COPY Gemfile.lock /app/Gemfile.lock
 # === 以下2つは初回以外コメントアウトでOK === 
 # RUN bundle update --bundler
 # RUN gem update --system
+
 RUN bundle install
+
+# === esbuildの場合 ===
+# RUN yarn add bootstrap @popperjs/core
 
 COPY . /app
 

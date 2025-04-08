@@ -1,9 +1,6 @@
-参考：https://qiita.com/Kento210/items/5f153bc20e9ba28375fd
+[project create]
+docker compose run --rm web rails new . 
 
-
-docker compose run --rm web rails new . (各種オプション)
-
-[Override: Gemfile -y]
-[Override: Dockerfile -n]
+Override: Gemfile -y
 
 docker compose up --build -d

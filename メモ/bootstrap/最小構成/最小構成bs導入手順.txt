@@ -1,3 +1,47 @@
+※esbuildもdartsassも使ってない単純な場合
+
+***CSS***
+[Gemfile]
+gem 'bootstrap'
+gem 'mini_racer'
+gem 'sassc-rails'
+
+[command]
+bundle install
+
+[file name change]
+application.css
+↓
+application.scss
+
+[server restart]
+
+[application.scss]
+@import 'bootstrap';
+
+
+***js***
+[command]
+ bin/importmap pin bootstrap
+
+
+[app/javasctipt/application.js]
+import "bootstrap"
+
+
+[application.scss]
+import "@hotwired/turbo-rails"
+import "controllers"
+import "bootstrap"
+
+
+[importmap.rb]
+pin "bootstrap"
+pin "@popperjs/core", to: "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/esm/popper.min.js"
+
+
+
+[confirm code]
 <h1 class="text-info">bootstrap</h1>
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">

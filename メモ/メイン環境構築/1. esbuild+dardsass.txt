@@ -1,0 +1,31 @@
+[DartSass + esbuild導入]
+
+[project create]
+
+sqlite3:
+docker compose run --rm web rails new . --css=sass --javascript=esbuild
+
+postgreswl:
+docker compose run --rm web rails new . --css=sass --javascript=esbuild --database=postgresql
+
+[compose.yml]
+command: に bin/dev を記述
+
+[package.json]
+"scripts": {
+	"build": "yarn build:js",
+	"build:js": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets",
+	"build:js:watch": "esbuild app/javascript/*.* --bundle --sourcemap --format=esm --outdir=app/assets/builds --public-path=/assets --watch",
+},
+※どっちでもいいけど、本番用と開発中--watchありとなしを作っておくといいかも（もし動かない場合は作ろう）h
+
+[Gemfile]
+gem "dartsass-rails", "~> 0.5.1"
+
+[command]
+bundle install
+
+[Procfile]
+web: rails s -p 3000 -b 0.0.0.0
+esbuild: yarn build:js:watch
+dartsass: bin/rails dartsass:watch

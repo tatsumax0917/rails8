@@ -1,0 +1,425 @@
+# ====================
+#   Basic
+# ====================
+
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+# 【追加するプラグイン】
+# plugins:
+#   - rubocop-performance
+#   - rubocop-rails
+#   - rubocop-rspec
+
+# 【他のファイルとのマージの調整】
+# inherit_mode:
+#   merge:
+#     - Exclude
+
+# 【全体的な設定を管理】
+# AllCops:
+# SuggestExtensions: false # ファイルの拡張子を推測して提案する機能
+# Exclude: # 特定のファイル、ディレクトリを除外
+#     - "data/**/*"
+
+# ====================
+#   Main Categories
+# ====================
+
+# 【Bundler関連の設定（Gemfileなど）】
+# * true: 有効 / false: 無効  
+# Bundler:
+#   Enabled: false
+
+# 【.gemspecファイルの検証】  
+# * true: 有効 / false: 無効  
+# Gemspec:
+#   Enabled: false
+
+# 【コードフォーマット（インデント、スペース、改行など）】  
+# * true: 有効 / false: 無効  
+# Layout:
+#   Enabled: false
+
+# 【警告や不要コード、未使用の変数などの検出】
+# * true: 有効 / false: 無効  
+# Lint:
+#   Enabled: false
+
+# 【コードの複雑度や行数などのメトリクス】
+# * true: 有効 / false: 無効  
+# Metrics:
+#   Enabled: false
+
+# 【変数名やメソッド名の命名規則】
+# * true: 有効 / false: 無効  
+# Naming:
+#   Enabled: false
+
+# 【パフォーマンスに関するチェック】
+# * true: 有効 / false: 無効  
+# Performance:
+#   Enabled: false
+#   Exclude:
+#     - "test/**/*"
+
+# 【Rails固有のベストプラクティスやルール】
+# * true: 有効 / false: 無効  
+# Rails:
+#   Enabled: false
+
+# 【セキュリティに関するチェック】
+# * true: 有効 / false: 無効  
+# Security:
+#   Enabled: false
+
+# 【Rubyスタイルに関するチェック】
+# * true: 有効 / false: 無効  
+# Style:
+#   Enabled: false
+
+# ====================
+#   Layout
+# ====================
+
+# 【case文のwhenのインデントの制御】
+# * true: 有効 / false: 無効
+# * EnforcedStyle: end → whenのインデントをendと同じにするs
+# Layout/CaseIndentation:
+#   Enabled: true
+#   EnforcedStyle: end
+
+# 【コメントがメソッド定義と同じインデントを持つようにする】
+# * true: 有効 / false: 無効
+# Layout/CommentIndentation:
+#   Enabled: true
+
+# 【elseはendと同じインデントを持つようにする】
+# * true: 有効 / false: 無効
+# Layout/ElseAlignment:
+#   Enabled: true
+
+# 【マジックコメント後に空行を入れる】  
+# * true: 有効 / false: 無効
+# Layout/EmptyLineAfterMagicComment:
+#   Enabled: true
+
+# 【ブロック本体の前後に空行を入れる】  
+# * true: 有効 / false: 無効
+# Layout/EmptyLinesAroundBlockBody:
+#   Enabled: true
+
+# 【クラス本体の前後に空行を入れる】  
+# * true: 有効 / false: 無効
+# Layout/EmptyLinesAroundClassBody:
+#   Enabled: true
+
+# 【メソッド本体の前後に空行を入れる】  
+# * true: 有効 / false: 無効
+# Layout/EmptyLinesAroundMethodBody:
+#   Enabled: true
+
+# 【モジュール本体の前後に空行を入れる】  
+# * true: 有効 / false: 無効
+# Layout/EmptyLinesAroundModuleBody:
+#   Enabled: true
+
+# 【endの位置を揃える】  
+# * true: 有効 / false: 無効
+# * EnforcedStyleAlignWith: variable → 変数と揃える
+# Layout/EndAlignment:
+#   Enabled: true
+#   EnforcedStyleAlignWith: variable
+
+# 【メソッド内部（privateなど）やクラス内部でのインデントの一貫性を求める設定】
+# * true: 一貫性のあるインデントを強制する / false: 一貫性を無視する
+# * EnforcedStyle: indented_internal_methods → メソッド内部は一段深いインデントを求める
+# Layout/IndentationConsistency:
+#   Enabled: false
+#   EnforcedStyle: indented_internal_methods
+
+# 【インデントにスペースを使用するか、タブを使用するかの設定】
+# * true: 有効 / false: 無効
+# * EnforcedStyle: spaces → スペースで統一
+# * EnforcedStyle: tabs → タブで統一
+# Layout/IndentationStyle:
+#   Enabled: true
+#   EnforcedStyle: spaces
+
+# 【インデントのスペース数】
+# * true: チェックする / false: 無視する
+# * Width: インデント幅（スペース数）
+# Layout/IndentationWidth:
+#   Enabled: true
+#   Width: 2
+
+# 【コメントの前にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/LeadingCommentSpace:
+#   Enabled: true
+
+# 【コロンの後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceAfterColon:
+#   Enabled: true
+
+# 【カンマの後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceAfterComma:
+#   Enabled: true
+
+# 【パラメータのデフォルト値の前後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceAroundEqualsInParameterDefault:
+#   Enabled: true
+
+# 【キーワードの前後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceAroundKeyword:
+#   Enabled: true
+
+# 【ブロックの前にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceBeforeBlockBraces:
+#   Enabled: true
+
+# 【カンマの前にスペースを入れる】
+# * true: 有効 / false: 無効
+# Layout/SpaceBeforeComma:
+#   Enabled: false
+
+# 【メソッドの引数の前にスペースを入れる】
+# * true: 有効 / false: 無効  
+# Layout/SpaceBeforeFirstArg:
+#   Enabled: true
+
+# 【ラムダ式の{ }内のスペース制御】  
+# * true: 有効 / false: 無効
+# Layout/SpaceInLambdaLiteral:
+#   Enabled: true
+
+# 【配列リテラルの[ ]内のスペース制御】  
+# * true: 有効 / false: 無効
+# * EnforcedStyle: space → 要素の前後にスペースを入れる  
+# * EnforcedStyleForEmptyBrackets: no_space → 空配列はスペース無し
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Enabled: true
+#   EnforcedStyle: space
+#   EnforcedStyleForEmptyBrackets: no_space
+
+# 【%記法配列の[ ]内のスペース制御】  
+# * true: 有効 / false: 無効
+# * EnforcedStyle: space → 要素の前後にスペースを入れる
+# Layout/SpaceInsideArrayPercentLiteral:
+#   Enabled: true
+#   EnforcedStyle: space
+
+# 【ブロックの前後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# * EnforcedStyleForEmptyBraces: space → 空のブロックはスペースを入れる
+# Layout/SpaceInsideBlockBraces:
+#   Enabled: true
+#   EnforcedStyleForEmptyBraces: space
+
+# # Use `{ a: 1 }` not `{a:1}`.
+# # Use `{}` not `{  }`.
+# Layout/SpaceInsideHashLiteralBraces:
+#   Enabled: true
+#   EnforcedStyle: space
+#   EnforcedStyleForEmptyBraces: no_space
+
+# 【括弧の中の前後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceInsideParens:
+#   Enabled: true
+
+# 【%記法内の区切り文字の前後にスペースを入れる】  
+# * true: 有効 / false: 無効
+# Layout/SpaceInsidePercentLiteralDelimiters:
+#   Enabled: false
+#   #EnforcedStyle: space
+
+# 【ハッシュのキー参照でスペースを入れない】  
+# * true: 有効 / false: 無効
+# Layout/SpaceInsideReferenceBrackets:
+#   Enabled: true
+
+# 【空行にスペースを入れない】  
+# * true: 有効 / false: 無効
+# Layout/TrailingEmptyLines:
+#   Enabled: true
+
+# 【行末の不要なスペースを排除】  
+# * true: 有効 / false: 無効
+# Layout/TrailingWhitespace:
+#   Enabled: true
+
+# ====================
+#   Lint
+# ====================
+
+# 【既に文字列のものに対する冗長な文字列変換（to_s）の排除】
+# * true: 排除する / false: 許可する
+# Lint/RedundantStringCoercion:
+#   Enabled: true
+
+# 【メソッド呼び出し時は括弧を必ず使用】
+# * true: 括弧が必要 / false: 括弧なし許可
+# Lint/RequireParentheses:
+#   Enabled: true
+
+# 【非推奨のURIエスケープメソッド(URI.escape / URI.unescape)の使用を禁止】
+# * true: 禁止する / false: 許可する
+# Lint/UriEscapeUnescape:
+#   Enabled: true
+
+# ====================
+#   Performance
+# ====================
+
+# 【FlatMapの使用に関するパフォーマンス規則】  
+# * true: 使用を推奨 / false: 使用を抑制  
+# Performance/FlatMap:
+#   Enabled: true
+
+# ====================
+#  Name
+# ====================
+
+# 【メソッド名の命名規則】  
+# * true: 有効 / false: 無効  
+# * メソッド名の最小文字数: 3文字以上  
+# * メソッド名の最大文字数: 20文字以下  
+# * メソッド名は snake_case を使用
+# Naming/MethodName:
+#   Enabled: true
+#   MinNameLength: 3
+#   MaxNameLength: 20
+#   Style: snake_case
+
+# 【クラス名の命名規則】  
+# * true: 有効 / false: 無効  
+# * クラス名は CamelCase を使用
+# Naming/ClassName:
+#   Enabled: true
+#   Style: CamelCase
+
+# 【変数名の命名規則】  
+# * true: 有効 / false: 無効  
+# * 変数名は snake_case を使用
+# Naming/VariableName:
+#   Enabled: true
+#   Style: snake_case
+
+# ====================
+#  Rails
+# ====================
+
+# 【assert_notの使用を推奨】  
+# * assert ! より assert_not を使うように推奨  
+# Rails/AssertNot:
+#   Include:
+#     - "test/**/*"
+
+# 【assert_not_xの使用を推奨】  
+# * refute_x より assert_not_x を使うように推奨 
+# Rails/RefuteMethods:
+#   Include:
+#     - "test/**/*"
+
+# ====================
+#   Style
+# ====================
+
+# 【&& / ||の使用を推奨】  
+# * true: 推奨 / false: 抑制
+# Style/AndOr:
+#   Enabled: false
+
+# 【メソッド呼び出し時はコロンを使用】  
+# * true: 使用 / false: 使用しない
+# Style/ColonMethodCall:
+#   Enabled: true
+
+# 【メソッド定義時は括弧を使用】  
+# * true: 使用 / false: 使用しない
+# Style/DefWithParentheses:
+#   Enabled: true
+
+# 【ハッシュのショートハンド構文を使用】  
+# * true: 使用 / false: 使用しない
+# * EnforcedShorthandSyntax: either → ショートハンド構文を使用
+# Style/HashSyntax:
+#   Enabled: true
+#   EnforcedShorthandSyntax: either
+
+# 【メソッド定義時は括弧を使用】  
+# * true: 使用 / false: 使用しない
+# Style/MethodDefParentheses:
+#   Enabled: true
+
+# 【条件式の括弧の使用】  
+# * true: 使用 / false: 使用しない
+# Style/ParenthesesAroundCondition:
+#   Enabled: true
+
+# 【%記法の括弧の使用】  
+# * true: 使用 / false: 使用しない
+# * PreferredDelimiters: 括弧の使用
+# Style/PercentLiteralDelimiters:
+#   Enabled: true
+#   PreferredDelimiters:
+#     default: "()"
+#     "%i": "[]"
+#     "%I": "[]"
+#     "%r": "{}"
+#     "%w": "[]"
+#     "%W": "[]"
+
+# 【''等の代わりに%Qの使用】
+# * true: 禁止 / false: 許可
+# Style/RedundantPercentQ:
+#   Enabled: false
+
+# 【冗長なreturnの排除】
+# * true: 排除 / false: 許可
+# * AllowMultipleReturnValues: true → 複数の返り値がある場合は許可
+# Style/RedundantReturn:
+#   Enabled: true
+#   AllowMultipleReturnValues: true
+
+# 【セミコロンの使用】  
+# * true: 許可 / false: 禁止
+# * AllowAsExpressionSeparator: true → 複数行の式を区切るためのセミコロンは許可
+# Style/Semicolon:
+#   Enabled: false
+#   AllowAsExpressionSeparator: true
+
+# 【lambda式で引数1つの時、括弧強制】  
+# * true: 強制 / false: 省略可能
+# Style/StabbyLambdaParentheses:
+# Enabled: true
+
+# 【文字列リテラルのルール】  
+# * true: 強制 / false: 許可  
+# * EnforcedStyle: double_quotes → ダブルクォートを強制
+# * Include: 指定されたファイル内でルールを適用
+# Style/StringLiterals:
+#   Enabled: true
+#   EnforcedStyle: double_quotes
+#   Include:
+#     - "app/**/*"
+#     - "config/**/*"
+#     - "lib/**/*"
+#     - "test/**/*"
+#     - "Gemfile"
+
+# # 【配列リテラルの末尾のカンマ】  
+# * true: 強制 / false: 許可
+# Style/TrailingCommaInArrayLiteral:
+#   Enabled: true
+
+# 【ハッシュリテラルの末尾のカンマ】  
+# * true: 強制 / false: 許可
+# Style/TrailingCommaInHashLiteral:
+#   Enabled: true

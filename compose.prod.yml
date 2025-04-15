@@ -12,12 +12,10 @@ services:
       - .:/app
     ports:
       - "80:3000"
-      # - "35729:35729"
     tty: true
     stdin_open: true
     depends_on:
       - db
-      - selenium
 
   db:
     image: postgres
@@ -27,11 +25,6 @@ services:
       POSTGRES_DB: app_production
     volumes:
       - postgres_volume:/var/lib/postgresql/data
-
-  selenium:
-    image: selenium/standalone-chrome
-    ports:
-      - "7900:7900"
 
 volumes:
   postgres_volume:

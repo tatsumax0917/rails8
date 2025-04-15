@@ -7,26 +7,35 @@ production:
 
 1.config.hosts = を確認
 
-config.hosts << "geocoder-cwja.onrender.com"
+config.hosts << "your-dmain"
 
 はconfig/environments/production.rbに記述するべき。
 
 
 2.
 ホスティングサービスに環境変数をセット
-キー  RAILS_ENV
-値    production
+キー  : RAILS_ENV
+値    : production
 
 3.
 本番用に調整する
 
-[config/application.rb]
+★本番推奨
+[config/environments/production.rb]
+config.assets.compile = false
+（アセットを事前にコンパイルして本番環境でのパフォーマンスを向上させる設定）
+
+config.public_file_server.enabled = true
+（公開された静的ファイルをサーバーで提供する設定）
+
+（一般的には、大規模の物なら外部サーバー、例えばNginxとかをリバースプロキシとして設置して
+画像やCSS,jsなどはそこから提供という構成にするとパフォーマンスがいいらしい）
+
+[config/environments/production.rb]
 config.assets.compile = true
+(アセットを本番環境で動的にコンパイルする。パフォーマンス落ちる)
 
-もしくは
 
-※ 一般的には、本番環境では config.assets.compile = false と設定
-※ config.public_file_server.enabled = trueこれも同時に設定する
 
 
 上記の設定は
@@ -57,5 +66,36 @@ services:
 $ docker compose -f compose.prod.yml build
 
 これで本番用イメージを作成してデプロイ
+(プロジェクトではイメージは１つ、最後にビルドしたもの。
+要はビルド元が俺の指定したファイルたちでイメージが出来上がるから
+それを使うのは当たり前)
 
 
+
+
+====
+
+  # 本番環境でマスターキーの存在を確認する
+  config.require_master_key = true
+
+  # ========================================
+  #   アセットコンパイル系の設定
+  # ========================================
+  # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
+  # 静的ファイルの提供をするかの設定（false: 無効, true: 有効)
+  # config.public_file_server.enabled = false
+  config.public_file_server.enabled = true
+
+  # Compress CSS using a preprocessor.
+  # Compress CSS using a preprocessor.
+  # config.assets.css_compressor = :sass
+
+  # Do not fall back to assets pipeline if a precompiled asset is missed.
+  # 事前にコンパイルされたアセットのみを使用（false: 事前コンパイル, true: 動的コンパイル）
+  config.assets.compile = false
+
+  # アセットパイプラインを有効にするための設定(false: 無効, true: 有効)
+  # config.assets.enabled = true
+
+  # コンパイル時にファイル名にダイジェスト付与(false: 付与しない, true: 付与する)
+  # config.assets.digest = true

@@ -1,6 +1,0 @@
-[project create]
-docker compose run --rm web rails new . 
-
-Override: Gemfile -y
-
-docker compose up --build -d

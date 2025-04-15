@@ -1,0 +1,225 @@
+＝＝＝Rails8＝＝＝
+
+Rails8からデフォルトで
+db/schema_cableとかcable.ymlとかあるから不要なら各種削除
+
+〇  GemfileからGem削除
+# gem "solid_cache"
+# gem "solid_queue"
+# gem "solid_cable"
+
+〇　各種関連ファイル削除
+config/cable.yml
+config/cache.yml
+config/queue.yml
+
+db/cable_schema.rb
+db/cache_schema.rb
+db/queue_schema.rb
+
+〇　各種設定削除
+[config/application.rb]
+# config.cache_store = :solid_cache_store
+# config.active_job.queue_adapter = :solid_queue
+# config.solid_queue.connects_to = { database: { writing: :queue } }
+
+これで使わない設定完了。
+
+※使う場合は本番でも各種DB生成すればOKっぽい
+
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+【ここからはRails7,8共通】
+※Rails7はここからでOK
+
+〇　config.hostsを確認
+
+[config/environments/production.rb]
+config.hosts << "your-dmain"
+
+※　なぜかなくてもいけた
+
+
+〇　ホスティングサービスのDB作成
+
+
+〇　ホスティングサービスに環境変数をセット
+キー  : RAILS_ENV
+値    : production
+
+キー  : RAILS_MASTER_KEY
+値    : config/master.keyにある
+
+キー  : DATABASE_URL
+値    : ホスティングサービスDBのInternal Database URL
+
+
+〇　本番用に調整する
+
+☆本番推奨☆
+[config/environments/production.rb]
+config.assets.compile = false
+config.public_file_server.enabled = true
+
+※config.assets.compile = false　アセットを事前にコンパイルして本番環境でのパフォーマンスを向上させる設定
+※config.public_file_server.enabled = true　公開された静的ファイルをサーバーで提供する設定
+※一般的には、大規模の物なら外部サーバー、例えばNginxとかをリバースプロキシとして設置して
+画像やCSS,jsなどはそこから提供という構成にするとパフォーマンスがいいらしい
+
+☆非推奨☆
+[config/environments/production.rb]
+config.assets.compile = true
+※アセットを本番環境で動的にコンパイルする。パフォーマンス落ちる、簡単設定
+
+
+〇　本番用ファイルを作成する
+※これが必要なのは開発と本番をきっちり分けるため
+
+〇　Dockerfile.prodを作成
+FROM ruby:3.3.7
+
+# === 最新のNode.jsとYarnを公式リポジトリからインストール ===
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
+    curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | tee /etc/apt/trusted.gpg.d/yarn.asc && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+    apt-get update -qq && \
+    apt-get install -y \
+    build-essential \
+    # === SQLite3 ===
+    # libsqlite3-dev \
+    # === PostgreSQL ===
+    postgresql-client \
+    libpq-dev \
+    nodejs \
+    yarn \
+    # curl \
+    vim
+
+WORKDIR /app
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
+
+# === 以下2つは初回以外コメントアウトでOK === 
+# RUN bundle update --bundler
+# RUN gem update --system
+RUN bundle install
+
+COPY . /app
+
+# # === entrypoint ===
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
+
+EXPOSE 3000
+
+CMD [ "rails", "server", "-b", "0.0.0.0", "-p", "3000" ]
+
+
+〇　entrypoint.shを作成
+#!/bin/bash
+
+# エラーが発生した場合にスクリプトを即座に停止
+set -e
+
+# ================================
+#     サーバーPIDファイルの調整
+# ================================
+# 既存のサーバーPIDファイルがあれば削除します。
+echo "既存のサーバーPIDファイルを削除します..."
+rm -f /app/tmp/pids/server.pid
+
+
+# ================================
+#     実行環境によって設定を分岐
+# ================================
+if [ "$RAILS_ENV" = "development" ]; then
+    echo "Development環境で起動中..."
+elif [ "$RAILS_ENV" = "production" ]; then
+    echo "Production環境で起動中..."
+    # 古いアセットをクリーンアップする
+    # echo "古いアセットをクリーンアップ中..."
+    # bundle exec rake assets:clobber
+    # 本番環境用にアセットをプリコンパイル
+    echo "アセットをプリコンパイル中..."
+    bundle exec rake assets:precompile
+    # 古いアセットをクリーンアップする
+    # echo "古いアセットクリーンアップ中..."
+    # bundle exec rake assets:clean
+else
+    echo "未知の環境: $RAILS_ENV"
+    exit 1
+fi
+
+# ================================
+#     データベースの生成
+# ================================
+# データベースがなければ作成、既に存在してたらなにもしない
+if ! bundle exec rake db:version >/dev/null 2>&1; then
+    echo "データベースが存在しなかったので作成中..."
+    bundle exec rake db:create
+fi
+
+# ================================
+#     マイグレーション実行 
+# ================================
+echo "マイグレーション中..."
+bundle exec rake db:migrate
+
+# Dockerfileで指定されたCMDコマンドを実行します。
+exec "$@"
+〇　compose.prod.ymlを作成
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      RAILS_ENV: production
+    volumes:
+      - .:/app
+    ports:
+      - "80:3000"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: app_production
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+
+volumes:
+  postgres_volume:
+
+
+
+〇　プリコンパイルする
+RAILS_ENV=production bin/rails assets:precompile
+
+
+〇　プリコンパイルのエラーがでる
+entrypoint.shのbundle exec rake assets:precompileの行でエラーがでる
+SEACRET_KEYみたいなエラー
+
+rails credentials:show
+で参照できるからコピーして
+.envファイルに
+SECRET_KEY_BASE=値
+と記述する
+
+
+〇　本番用イメージを作成　ビルド
+docker compose -f compose.prod.yml build
+
+※プロジェクトではイメージは１つ、最後にビルドしたもの。
+要はビルド元が俺の指定したファイルたちでイメージが出来上がるからそれを使うのは当たり前
+
+ 

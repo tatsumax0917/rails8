@@ -25,7 +25,4 @@ module App
     # config.eager_load_paths << Rails.root.join("extras")
   end
   
-  config.assets.compile = true
-  config.public_file_server.enabled = true
-
 end

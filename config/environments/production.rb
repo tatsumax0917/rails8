@@ -18,6 +18,19 @@ Rails.application.configure do
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
+
+  # ========================================
+  #   アセットコンパイル系の設定
+  # ========================================
+  # 事前にコンパイルされたアセットのみを使用（false: 事前コンパイル, true: 動的コンパイル）
+  config.assets.compile = false
+  # 静的ファイルの提供をするかの設定（false: 無効, true: 有効)
+  config.public_file_server.enabled = true
+  config.assets.digest = true
+
+  config.assets.js_compressor = :uglifier  # 必要に応じてJS圧縮設定
+  config.assets.css_compressor = :sass  # 必要に応じてCSS圧縮設定
+  
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
